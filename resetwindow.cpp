@@ -28,7 +28,7 @@ ResetWindow::ResetWindow(QWidget *parent)
     connect(placeButton, &QPushButton::clicked, this, &ResetWindow::placeShip);
 
     doneButton = new QPushButton("Done", centralWidget);
-    doneButton->setEnabled(false); // Initially disabled
+    doneButton->setEnabled(false);
     connect(doneButton, &QPushButton::clicked, this, &ResetWindow::checkAllShipsPlaced);
 
     scene->installEventFilter(this);
@@ -100,8 +100,8 @@ void ResetWindow::cellClicked(int row, int col) {
         int x = col * 40;
         int y = row * 40;
         currentShip->setPos(x, y);
-        scene->removeItem(currentShip); // Remove from the scene to re-add after the rotation
-        scene->addItem(currentShip); // Re-add to the scene to ensure it's on top
+        scene->removeItem(currentShip);
+        scene->addItem(currentShip);
     }
 }
 
@@ -137,9 +137,7 @@ bool ResetWindow::eventFilter(QObject *object, QEvent *event) {
 }
 
 void ResetWindow::checkAllShipsPlaced() {
-    // Check if all ships have been placed
     if (!currentShip && shipSizes.isEmpty()) {
         doneButton->setEnabled(true);
     }
 }
-
