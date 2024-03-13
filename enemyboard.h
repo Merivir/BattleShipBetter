@@ -18,8 +18,7 @@ protected:
     void clearBoard() override;
 
 private:
-    QVector<QVector<QPushButton*>> gridButtons; // 2D array of buttons for interactive board
-
+    QVector<QVector<QPushButton*>> gridButtons;
 };
 
 #endif // ENEMYBOARD_H
