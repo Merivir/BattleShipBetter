@@ -19,12 +19,12 @@ public:
     ~GameBoard();
 
     virtual void drawGrid() = 0;
-    virtual void setupBoard() = 0; // A pure virtual function for setting up the board
+    virtual void setupBoard() = 0;
 
 protected:
     QGraphicsScene *scene;
-    QList<Ship*> ships; // Add this to your private section
-    bool interactive; // Whether this board is interactive (has buttons)
+    QList<Ship*> ships;
+    bool interactive;
 
     const QStringList columnLabels = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
     const QStringList rowLabels = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
@@ -37,9 +37,9 @@ protected:
     void setupNonInteractiveBoard();
     void setupInteractiveBoard();
 
-    const int gridSize = 10;  // 10x10 grid
-    const int cellSize = 40;  // Each cell is 40x40 pixels
-    const int labelOffset = 20; // Offset for labels from the grid
+    const int gridSize = 10;
+    const int cellSize = 40;
+    const int labelOffset = 20;
 
 };
 
