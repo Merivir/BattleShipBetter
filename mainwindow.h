@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include "gameboard.h"
+#include "playerboard.h"
+#include "enemyboard.h"
 
 #include <QPushButton>
 #include <QMainWindow>
@@ -15,17 +17,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private:
-    GameBoard *player1Board;
-    GameBoard *player2Board;
-    QPushButton *playButton;
-    QPushButton *randomizeButton;
-    QPushButton *resetButton;
-
 public slots:
-    void onRandomizeClicked();
-    void onResetClicked();
-    void onPlayClicked();
+    void handleSetupCompleted(PlayerBoard* board);
+
+private:
+    PlayerBoard *player1Board;
+    EnemyBoard *player2Board;
 
 };
 

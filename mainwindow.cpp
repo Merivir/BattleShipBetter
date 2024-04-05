@@ -2,6 +2,7 @@
 #include "playerboard.h"
 #include "enemyboard.h"
 #include "resetwindow.h"
+#include "setupwindow.h"
 
 #include <QLabel>
 #include <QGridLayout>
@@ -13,14 +14,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
     QHBoxLayout *boardLayout = new QHBoxLayout(centralWidget);
-
-    randomizeButton = new QPushButton("🔄", this);
-    resetButton = new QPushButton("↪️", this);
-    playButton = new QPushButton("Play", this);
-
-    connect(randomizeButton, &QPushButton::clicked, this, &MainWindow::onRandomizeClicked);
-    connect(resetButton, &QPushButton::clicked, this, &MainWindow::onResetClicked);
-    connect(playButton, &QPushButton::clicked, this, &MainWindow::onPlayClicked);
 
     // Create the game boards
     player2Board = new EnemyBoard(this);
@@ -35,32 +28,27 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     boardLayout->addWidget(player1Board);
     boardLayout->addWidget(player2Board);
 
-
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
-    buttonLayout->addWidget(randomizeButton);
-    buttonLayout->addWidget(resetButton);
-    buttonLayout->addWidget(playButton);
-
     mainLayout->addLayout(boardLayout);
-    mainLayout->addLayout(buttonLayout);
-
-    centralWidget->setLayout(buttonLayout);
     setCentralWidget(centralWidget);
 
+    SetupWindow* setupWindow = new SetupWindow(this);
+    connect(setupWindow, &SetupWindow::setupCompleted, this, &MainWindow::handleSetupCompleted);
+
 }
 
-void MainWindow::onRandomizeClicked() {
-    player1Board->setupBoard();
+void MainWindow::handleSetupCompleted(PlayerBoard* boardOb) {
+    qDebug() << "Before copying ships:";
+    boardOb->renderBoard(); // Print the board state of SetupWindow's PlayerBoard
+
+    player1Board->copyBoardAndSetupShips(boardOb->board); // Copy the state to MainWindow's PlayerBoard
+
+    qDebug() << "After copying ships:";
+    player1Board->renderBoard(); // Print the board state to verify the copy
+
+    show();
 }
 
-void MainWindow::onResetClicked() {
-    ResetWindow *resetWindow = new ResetWindow(this);
-
-    resetWindow->show();
+MainWindow::~MainWindow() {
+    delete player1Board;
+    delete player2Board;
 }
-
-
-void MainWindow::onPlayClicked() {
-}
-
-MainWindow::~MainWindow() {}

@@ -11,6 +11,7 @@ public:
     enum Orientation { Horizontal, Vertical };
 
     Ship(int length, Orientation orientation, QGraphicsItem *parent = nullptr);
+    Ship(const Ship& other);
 
     void setShipPosition(int x, int y);
     QList<QPoint> getOccupiedCells() const;

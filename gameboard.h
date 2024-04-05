@@ -16,6 +16,7 @@ class GameBoard : public QGraphicsView {
 
 public:
     explicit GameBoard(QWidget *parent = nullptr);
+    GameBoard(const GameBoard& other);
     ~GameBoard();
 
     virtual void drawGrid() = 0;
@@ -31,9 +32,6 @@ protected:
 
     virtual void clearBoard() = 0;
 
-
-    bool isSpaceAroundShipFree(const Ship* ship) const;
-    bool canPlaceShip(Ship* ship, int col, int row);
     void setupNonInteractiveBoard();
     void setupInteractiveBoard();
 

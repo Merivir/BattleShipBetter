@@ -10,6 +10,11 @@ Ship::Ship(int length, Orientation orientation, QGraphicsItem *parent)
     setBrush(QBrush(Qt::gray));
 }
 
+Ship::Ship(const Ship& other) {
+        this->length = other.length;
+        this->orientation = other.orientation;
+}
+
 void Ship::setShipPosition(int x, int y) {
     setPos(x * 40, y * 40);
 }

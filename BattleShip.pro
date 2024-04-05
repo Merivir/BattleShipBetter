@@ -15,7 +15,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     playerboard.cpp \
-    resetwindow.cpp \
+    setupwindow.cpp \
     ship.cpp
 
 HEADERS += \
@@ -23,7 +23,7 @@ HEADERS += \
     gameboard.h \
     mainwindow.h \
     playerboard.h \
-    resetwindow.h \
+    setupwindow.h \
     ship.h
 
 FORMS += \
