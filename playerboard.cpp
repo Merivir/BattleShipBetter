@@ -188,3 +188,64 @@ void PlayerBoard::resetBoard() {
     board.fill(QVector<int>(10, 0)); // Reset the logical board representation.
     setupBoard(); // Optionally call setupBoard to reinitialize the game state.
 }
+
+void PlayerBoard::markCellAsBombed(int row, int col, const QString& result) {
+    if (row < 0 || row >= gridSize || col < 0 || col >= gridSize) {
+        qDebug() << "Invalid cell coordinates:" << row << "," << col;
+        return;
+    }
+
+    // Calculate the center position of the cell
+    int centerX = col * cellSize + cellSize / 2 ;
+    int centerY = row * cellSize + cellSize / 2 ;
+
+    // Determine the symbol or text to display based on the result
+    QString displayText;
+    if (result == "hit") {
+        displayText = "💣"; // Use a bomb emoji for hits
+    } else if (result == "miss") {
+        displayText = "❌"; // Use a cross mark for misses
+    } else {
+        qDebug() << "Unknown result:" << result;
+        return; // Exit if the result is neither "hit" nor "miss"
+    }
+
+    // Create and configure a QGraphicsTextItem for the display text
+    QGraphicsTextItem* textItem = new QGraphicsTextItem(displayText);
+    QFont font = textItem->font();
+    font.setPointSize(cellSize / 2); // Set font size relative to cell size
+    textItem->setFont(font);
+
+    // Get the bounding rect to calculate offsets for centering
+    QRectF textRect = textItem->boundingRect();
+    textItem->setPos(centerX - textRect.width() / 2, centerY - textRect.height() / 2); // Center the text item
+
+    scene->addItem(textItem); // Add the text item to the scene
+
+    // Optionally, update the board data model if needed
+    if (result == "hit") {
+        board[row][col] = 2; // Example: Let's say '2' represents a hit state
+    } else if (result == "miss") {
+        board[row][col] = 3; // Example: Let's say '3' represents a miss state
+    }
+}
+
+
+
+QString PlayerBoard::checkAttack(int row, int col) {
+    int &cell = board[row][col];
+    qDebug() << "checking:" << row << col;
+
+    QString result = "miss";
+    if (cell == 1) { // Ship is hit
+        cell = 2; // Mark as hit
+        // Further check if the ship is sunk could be implemented here
+        result = "hit";
+    } else if (cell == 0) { // Missed shot
+        cell = 3; // Mark as missed
+        result = "miss";
+    }
+
+    markCellAsBombed(row, col, result);
+    return result; // Default case, might include hits on already hit locations
+}

@@ -12,6 +12,7 @@ CONFIG += c++11
 SOURCES += \
     enemyboard.cpp \
     gameboard.cpp \
+    gameclient.cpp \
     main.cpp \
     mainwindow.cpp \
     playerboard.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
 HEADERS += \
     enemyboard.h \
     gameboard.h \
+    gameclient.h \
     mainwindow.h \
     playerboard.h \
     setupwindow.h \

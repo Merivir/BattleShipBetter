@@ -4,6 +4,7 @@
 #include "gameboard.h"
 #include "playerboard.h"
 #include "enemyboard.h"
+#include "gameclient.h"
 
 #include <QPushButton>
 #include <QMainWindow>
@@ -19,11 +20,12 @@ public:
 
 public slots:
     void handleSetupCompleted(PlayerBoard* board);
+    void onAttackReceived(int row, int col);
 
 private:
     PlayerBoard *player1Board;
     EnemyBoard *player2Board;
-
+    GameClient *gameClient;
 };
 
 #endif // MAINWINDOW_H

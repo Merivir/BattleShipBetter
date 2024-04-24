@@ -10,9 +10,16 @@ public:
 
     void setupBoard() override;
     void drawGrid() override;
+    void parseCoordinates(const QString& coordinates, int &row, int &col);
 
 private slots:
     void cellClicked(int row, int col);
+
+public slots:
+    void updateCellBasedOnServerResponse(const QStringList& messageParts);
+
+signals:
+    void cellAttackRequested(int row, int col);
 
 protected:
     void clearBoard() override;
