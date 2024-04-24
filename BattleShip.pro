@@ -10,6 +10,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    endgamewindow.cpp \
     enemyboard.cpp \
     gameboard.cpp \
     gameclient.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
     ship.cpp
 
 HEADERS += \
+    endgamewindow.h \
     enemyboard.h \
     gameboard.h \
     gameclient.h \

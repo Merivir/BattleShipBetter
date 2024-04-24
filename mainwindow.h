@@ -21,7 +21,8 @@ public:
 public slots:
     void handleSetupCompleted(PlayerBoard* board);
     void onAttackReceived(int row, int col);
-
+    void handleGameOver();
+    void onGameOverReceived();
 private:
     PlayerBoard *player1Board;
     EnemyBoard *player2Board;

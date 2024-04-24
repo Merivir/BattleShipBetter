@@ -35,7 +35,6 @@ void GameClient::onDisconnected() {
     emit disconnected();
 }
 
-// Assume socket is a valid QTcpSocket pointer connected to the server
 void GameClient::sendAttackCoordinates(const QString& coordinates) {
     if (socket->state() == QTcpSocket::ConnectedState) {
         socket->write(coordinates.toUtf8());
@@ -45,7 +44,7 @@ void GameClient::sendAttackCoordinates(const QString& coordinates) {
 void GameClient::sendCoordinatesToServer(int row, int col) {
     char colLetter = 'A' + col;
 
-    QString coordinates = QString("%1,%2,attack").arg(colLetter).arg(row + 1); // Rows and cols are 0-indexed
+    QString coordinates = QString("%1,%2,attack").arg(colLetter).arg(row + 1);
 
     if (socket->state() == QTcpSocket::ConnectedState) {
         qDebug() << "Sending coordinates to server:" << coordinates;
@@ -55,39 +54,28 @@ void GameClient::sendCoordinatesToServer(int row, int col) {
     }
 }
 
-//void GameClient::onDataReceived() {
-//    QByteArray data = socket->readAll();
-//    QString receivedData = QString::fromUtf8(data);
-//    // Assume data is "attack,row,col"
-//    qDebug() << "Received message:" << receivedData;
-
-//    QStringList parts = receivedData.split(',');
-//    if (parts.length() == 3 && parts[2] == "attack") {
-//        int row = parts[0].toInt() - 65;
-//        int col = parts[1].toInt();
-//        emit attackReceived(row, col); // Emit the signal
-//    }
-//}
-
 void GameClient::onDataReceived() {
     QByteArray data = socket->readAll();
-    QString receivedData = QString::fromUtf8(data).trimmed(); // Trim any whitespace/newline
+    QString receivedData = QString::fromUtf8(data).trimmed();
     qDebug() << "Received message:" << receivedData;
 
     QStringList parts = receivedData.split(',');
     if (parts.length() == 3 && parts[2] == "attack") {
-        // Assuming parts[0] is the column letter
-        QChar colLetter = parts[0].at(0).toUpper(); // Ensure uppercase for consistency
-        int col = colLetter.unicode() - 'A'; // Convert column letter to zero-based index
+        QChar colLetter = parts[0].at(0).toUpper();
+        int col = colLetter.unicode() - 'A';
 
-        // Assuming parts[1] is the row number
-        int row = parts[1].toInt() - 1; // Convert to int and adjust for zero-based indexing if necessary
+        int row = parts[1].toInt() - 1;
 
-        emit attackReceived(row, col); // Emit the signal with adjusted row and col values
+        emit attackReceived(row, col);
     } else {
         emit serverResponseReceived(parts);
-        // Handle error or unexpected message format
         qDebug() << "Unexpected message format or content.";
+    }
+
+    if (receivedData == "game_over") {
+        qDebug("game_over recieved");
+        emit gameOverReceived();
+        return;
     }
 }
 

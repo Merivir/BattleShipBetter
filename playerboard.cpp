@@ -4,7 +4,7 @@
 PlayerBoard::PlayerBoard(QWidget *parent)
     : GameBoard(parent)
     , board(10, QVector<int>(10, 0))
-
+    , shipCellsRemaining(20)
 {
     scene->setSceneRect(-labelOffset, -labelOffset, gridSize * cellSize + 2 * labelOffset, gridSize * cellSize + 2 * labelOffset);
 
@@ -119,21 +119,21 @@ void PlayerBoard::setupBoard() {
 }
 
 
-void PlayerBoard::renderBoard() {
-    for (int row = 0; row < board.size(); ++row) {
-        QString line;
-        for (int col = 0; col < board[row].size(); ++col) {
-            switch (board[row][col]) {
-                case 0: line += "~"; break; // Water
-                case 1: line += "S"; break; // Ship (unhit)
-                case 2: line += "*"; break; // Hit ship part
-                default: line += "?"; break; // Unknown state
-            }
-            line += " ";
-        }
-        qDebug() << line; // Assuming you're using Qt's debug output
-    }
-}
+//void PlayerBoard::renderBoard() {
+//    for (int row = 0; row < board.size(); ++row) {
+//        QString line;
+//        for (int col = 0; col < board[row].size(); ++col) {
+//            switch (board[row][col]) {
+//                case 0: line += "~"; break; // Water
+//                case 1: line += "S"; break; // Ship (unhit)
+//                case 2: line += "*"; break; // Hit ship part
+//                default: line += "?"; break; // Unknown state
+//            }
+//            line += " ";
+//        }
+//        qDebug() << line; // Assuming you're using Qt's debug output
+//    }
+//}
 
 bool PlayerBoard::isHit(int row, int col) {
     // Ensure row and col are within the board's bounds before checking
@@ -176,17 +176,17 @@ void PlayerBoard::drawGrid() {
 }
 
 void PlayerBoard::clearBoard() {
-    scene->clear(); // Явно очищаем сцену
+    scene->clear();
     drawGrid();
-    ships.clear(); // Очищаем список кораблей
-    board.fill(QVector<int>(10, 0)); // Сброс состояния доски
+    ships.clear();
+    board.fill(QVector<int>(10, 0));
 }
 
 
 void PlayerBoard::resetBoard() {
-    clearBoard(); // Clears the graphical scene and ship items.
-    board.fill(QVector<int>(10, 0)); // Reset the logical board representation.
-    setupBoard(); // Optionally call setupBoard to reinitialize the game state.
+    clearBoard();
+    board.fill(QVector<int>(10, 0));
+    setupBoard();
 }
 
 void PlayerBoard::markCellAsBombed(int row, int col, const QString& result) {
@@ -239,6 +239,10 @@ QString PlayerBoard::checkAttack(int row, int col) {
     QString result = "miss";
     if (cell == 1) { // Ship is hit
         cell = 2; // Mark as hit
+        shipCellsRemaining--; // Decrement the count
+        if (shipCellsRemaining == 0) {
+            emit allShipsSunk(); // Emit signal if all ships are sunk
+        }
         // Further check if the ship is sunk could be implemented here
         result = "hit";
     } else if (cell == 0) { // Missed shot
@@ -249,3 +253,4 @@ QString PlayerBoard::checkAttack(int row, int col) {
     markCellAsBombed(row, col, result);
     return result; // Default case, might include hits on already hit locations
 }
+

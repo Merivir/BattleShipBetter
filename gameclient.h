@@ -21,7 +21,7 @@ signals:
     void dataReceived(const QByteArray &data);
     void serverResponseReceived(const QStringList& result);
     void attackReceived(int row, int col);
-
+    void gameOverReceived();
 
 public slots:
     void onConnected();
