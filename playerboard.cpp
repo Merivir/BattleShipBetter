@@ -119,21 +119,21 @@ void PlayerBoard::setupBoard() {
 }
 
 
-//void PlayerBoard::renderBoard() {
-//    for (int row = 0; row < board.size(); ++row) {
-//        QString line;
-//        for (int col = 0; col < board[row].size(); ++col) {
-//            switch (board[row][col]) {
-//                case 0: line += "~"; break; // Water
-//                case 1: line += "S"; break; // Ship (unhit)
-//                case 2: line += "*"; break; // Hit ship part
-//                default: line += "?"; break; // Unknown state
-//            }
-//            line += " ";
-//        }
-//        qDebug() << line; // Assuming you're using Qt's debug output
-//    }
-//}
+void PlayerBoard::renderBoard() {
+    for (int row = 0; row < board.size(); ++row) {
+        QString line;
+        for (int col = 0; col < board[row].size(); ++col) {
+            switch (board[row][col]) {
+                case 0: line += "~"; break; // Water
+                case 1: line += "S"; break; // Ship (unhit)
+                case 2: line += "*"; break; // Hit ship part
+                default: line += "?"; break; // Unknown state
+            }
+            line += " ";
+        }
+        qDebug() << line; // Assuming you're using Qt's debug output
+    }
+}
 
 bool PlayerBoard::isHit(int row, int col) {
     // Ensure row and col are within the board's bounds before checking

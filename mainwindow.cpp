@@ -47,12 +47,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 void MainWindow::handleSetupCompleted(PlayerBoard* boardOb) {
     qDebug() << "Before copying ships:";
-   // boardOb->renderBoard(); // Print the board state of SetupWindow's PlayerBoard
+    boardOb->renderBoard(); // Print the board state of SetupWindow's PlayerBoard
 
     player1Board->copyBoardAndSetupShips(boardOb->board); // Copy the state to MainWindow's PlayerBoard
 
     qDebug() << "After copying ships:";
-  //  player1Board->renderBoard(); // Print the board state to verify the copy
+    player1Board->renderBoard(); // Print the board state to verify the copy
 
     show();
 }

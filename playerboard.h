@@ -19,7 +19,7 @@ public:
     QString checkAttack(int row, int col); // Checks the attack and returns "hit", "miss", or "sunk"
     void markCellAsBombed(int row, int col, const QString& result);
     bool isHit(int row, int col);
- //   void renderBoard();
+    void renderBoard();
 
     QVector<QVector<int>> board;
     int shipCellsRemaining;
