@@ -14,6 +14,9 @@ public:
     void sendData(const QString &data);
     void sendAttackCoordinates(const QString& coordinates);
     void sendCoordinatesToServer(int row, int col); // Adapt parameters as needed
+    QString encryptData(const QString &data);
+    QString decryptData(const QString &data);
+
 
 signals:
     void connected();
@@ -30,6 +33,7 @@ public slots:
 
 private:
     QTcpSocket *socket;
+    const uint8_t encryptionKey;
 };
 
 #endif // GAMECLIENT_H

@@ -35,7 +35,8 @@ void handle_client(int client_socket, int client_id) {
             if (send(paired_client_socket, buffer, strlen(buffer), 0) == -1) {
                 std::cerr << "Error sending message to client." << std::endl;
             } else {
-                std::cout << "Sent coordinates to Client " << (client_id % 2 != 0 ? client_id + 1 : client_id - 1) << ": " << buffer << std::endl;
+                std::cout << "Sent coordinates to Client " << std::endl;
+                //std::cout << (client_id % 2 != 0 ? client_id + 1 : client_id - 1) << ": " << buffer << std::endl;
             }
         }
     } catch (...) {

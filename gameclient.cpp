@@ -1,7 +1,7 @@
 #include "gameclient.h"
 #include <QDebug>
 
-GameClient::GameClient(QObject *parent) : QObject(parent), socket(new QTcpSocket(this)) {
+GameClient::GameClient(QObject *parent) : QObject(parent), socket(new QTcpSocket(this)), encryptionKey{214} {
     connect(socket, &QTcpSocket::connected, this, &GameClient::onConnected);
     connect(socket, &QTcpSocket::disconnected, this, &GameClient::onDisconnected);
     connect(socket, &QTcpSocket::readyRead, this, &GameClient::onDataReceived);
@@ -18,12 +18,20 @@ void GameClient::disconnectFromServer() {
 
 void GameClient::sendData(const QString &data) {
     if (socket->state() == QTcpSocket::ConnectedState) {
+        QString encryptedData = encryptData(data);
         socket->write(data.toUtf8()); // Convert QString to QByteArray
     } else {
         qDebug() << "Socket is not connected, cannot send data.";
     }
 }
 
+QString GameClient::encryptData(const QString &data) {
+    QString encryptedData;
+    for (int i = 0; i < data.length(); ++i) {
+        encryptedData.append(QChar(data.at(i).unicode() ^ encryptionKey)); // XOR encryption
+    }
+    return encryptedData;
+}
 
 void GameClient::onConnected() {
     qDebug() << "Connected to server.";
@@ -54,10 +62,21 @@ void GameClient::sendCoordinatesToServer(int row, int col) {
     }
 }
 
+
+QString GameClient::decryptData(const QString &data) {
+    QString decryptedData;
+    for (int i = 0; i < data.length(); ++i) {
+        decryptedData.append(QChar(data.at(i).unicode() ^ encryptionKey)); // XOR decryption
+    }
+    return decryptedData;
+}
+
 void GameClient::onDataReceived() {
     QByteArray data = socket->readAll();
     QString receivedData = QString::fromUtf8(data).trimmed();
     qDebug() << "Received message:" << receivedData;
+
+    QString decryptedData = decryptData(receivedData);
 
     QStringList parts = receivedData.split(',');
     if (parts.length() == 3 && parts[2] == "attack") {
